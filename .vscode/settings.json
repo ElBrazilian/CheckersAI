@@ -1,0 +1,16 @@
+{
+    "C_Cpp.default.includePath": [
+        "./include/",
+        "/usr/include/",
+        "/usr/include/SDL2/"
+    ],
+    "doxdocgen.file.versionTag": "@version 0.1",
+    "doxdocgen.generic.authorEmail": "nathan.schiffmacher@student.isae-supaero.fr",
+    "doxdocgen.generic.authorName": "Nathan Schiffmacher",
+    "doxdocgen.generic.dateFormat": "DD-MM-YYYY",
+    "files.associations": {
+        "game.h": "c",
+        "app.h": "c",
+        "string.h": "c"
+    }
+}
