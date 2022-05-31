@@ -20,6 +20,7 @@
 #include "SDL_render.h"
 
 #define GRID_SIZE 10
+#define NUM_PAWNS 20
 #define MAX_NAME_SIZE 150
 #define MAX_AVAILABLE_POSITIONS 10
 
@@ -44,16 +45,12 @@
 #define PLAYER_RADIUS (GRID_CELL_SIZE * PLAYER_RADIUS_PRC / 2) 
 
 // Player A
-#define PLAYERA_NAME "Player A"
-#define PLAYERA_POSX 0
-#define PLAYERA_POSY 4
-#define PLAYERA_COLOR 255,0,0,255
+#define PLAYERA_NAME "Odd player"
+#define PLAYERA_COLOR 0,0,0,255
 
 // Player B
-#define PLAYERB_NAME "Player B"
-#define PLAYERB_POSX 8
-#define PLAYERB_POSY 4
-#define PLAYERB_COLOR 0,255,0,255
+#define PLAYERB_NAME "Even player"
+#define PLAYERB_COLOR 255,255,255,255
 
 #define AVAILABLE_POSITION_COLOR 180,180,180,255
 
@@ -61,18 +58,25 @@ typedef struct {
     int x, y;
 } Point;
 
-typedef struct {
-    char name[MAX_NAME_SIZE];
-    Point *pos;
+typedef struct Pawn Pawn;
+typedef struct Player Player;
+struct Pawn {
+    Player *owner;
 
-} Player;
+    Point pos;
+    bool is_dame;
+};
+struct Player {
+    char name[MAX_NAME_SIZE];
+
+    Pawn **pawns;
+
+};
 
 typedef struct {
     Player *playerA;
     Player *playerB;
     Player *current_turn;
-
-
 } Game;
 
 #include "app.h"
@@ -82,7 +86,7 @@ Point *create_point(int x, int y);
 void delete_point(Point *point);
 
 // PLAYER
-Player *create_player(char name[], Point *base_pos);
+Player *create_player(char name[], bool even_player);
 bool player_can_move_pawn(Player *player, Game *game); // TODO 
 bool wall_block_path(Game *game, Point a, Point b); // returns true if a wall blocks the path
 void update_next_pawn_position(Game *game, int *current_overflow_index, int i, int dx, int dy); // helper function for available_pawn_positions
@@ -90,17 +94,15 @@ void update_available_pawn_positions(Game *game); // fils available positions wi
 bool player_can_place_pawn(Game *game, Point p); // TODO: Return true if the player current dragging a pawn can place here 
 void delete_player(Player *player);
 
+//PAWN
+Pawn *create_pawn(Player *owner, int x, int y);
+void delete_pawn(Pawn *pawn);
+
 
 // GAMEX
-Game *create_game(char playerA_name[], Point *playerA_pos, char playerB_name[], Point *playerB_pos);
+Game *create_game(char playerA_name[], char playerB_name[]);
 void delete_game(Game *game);
 
-/**
- * @brief transforms a grid position (3,4) for instance to a pixel position on the screen
- */
-void player_pos_to_pixel_pos(Player *player, Point *pixel_pos);
-void grid_pos_to_pixel_pos(Point *grid_pos, Point *pixel_pos);
-void pixel_pos_to_player_pos(Point *pixel_pos, Point *player_pos);
 
 
 /**

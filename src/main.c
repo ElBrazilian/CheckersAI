@@ -32,8 +32,8 @@ void initialize_app(App *app){
 
     // Create game
     app->game = create_game(
-        PLAYERA_NAME, create_point(PLAYERA_POSX, PLAYERA_POSY),
-        PLAYERB_NAME, create_point(PLAYERB_POSX, PLAYERB_POSY)
+        PLAYERA_NAME,
+        PLAYERB_NAME
     );
     app->mouse_pos      = create_point(0,0);
     app->mouse_state    = 0;

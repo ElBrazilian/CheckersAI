@@ -16,10 +16,32 @@ void delete_point(Point *point){
 
 
 // PLAYER
-Player *create_player(char name[], Point *base_pos){
+Player *create_player(char name[], bool even_player){
     Player *player  = malloc(sizeof(Player));
     strcpy(player->name, name);
-    player->pos     = base_pos;
+    
+    player->pawns = malloc(NUM_PAWNS * sizeof(Pawn *));
+    // Create even player pawns
+    int i = 0;
+    if (even_player){
+        for (int y = GRID_SIZE - 4; y < GRID_SIZE; y++){
+            for (int x = 0; x < GRID_SIZE; x++){
+                if ((x + y) % 2 == 0){
+                    player->pawns[i] = create_pawn(player, x, y);
+                    i++;
+                }
+            }
+        }
+    } else {
+        for (int y = 0; y < 4; y++){
+            for (int x = 0; x < GRID_SIZE; x++){
+                if ((x + y) % 2 != 0){
+                    player->pawns[i] = create_pawn(player, x, y);
+                    i++;
+                }
+            }
+        }
+    }
 
     return player;
 }
@@ -40,8 +62,21 @@ bool player_can_place_pawn(Game *game, Point p){
 }
 
 void delete_player(Player *player){
-    free(player->pos);
     free(player);
+}
+
+Pawn *create_pawn(Player *owner, int x, int y){
+    Pawn *pawn      = malloc(sizeof(Pawn));
+    pawn->owner     = owner;
+    pawn->pos.x     = x;
+    pawn->pos.y     = y;
+    pawn->is_dame   = false; 
+    return pawn;
+}
+
+
+void delete_pawn(Pawn *pawn){
+    free(pawn);
 }
 
 int min(int a, int b){
@@ -61,10 +96,10 @@ void swap_points(Point *a, Point *b){
 
 
 // GAME
-Game *create_game(char playerA_name[], Point *playerA_pos, char playerB_name[], Point *playerB_pos){
+Game *create_game(char playerA_name[], char playerB_name[]){
     Game *game = malloc(sizeof(Game));
-    game->playerA = create_player(playerA_name, playerA_pos);
-    game->playerB = create_player(playerB_name, playerB_pos);
+    game->playerA = create_player(playerA_name, false);
+    game->playerB = create_player(playerB_name, true);
     game->current_turn = game->playerA;
 
     return game;
@@ -77,18 +112,6 @@ void delete_game(Game *game){
     free(game);
 }
 
-void player_pos_to_pixel_pos(Player *player, Point *pixel_pos){
-    pixel_pos->x = GRID_OFFSET_SIZE + player->pos->x * GRID_CELL_SIZE + GRID_CELL_SIZE / 2;
-    pixel_pos->y = GRID_OFFSET_SIZE + player->pos->y * GRID_CELL_SIZE + GRID_CELL_SIZE / 2;
-}
-void grid_pos_to_pixel_pos(Point *grid_pos, Point *pixel_pos){
-    pixel_pos->x = GRID_OFFSET_SIZE + grid_pos->x * GRID_CELL_SIZE + GRID_CELL_SIZE / 2;
-    pixel_pos->y = GRID_OFFSET_SIZE + grid_pos->y * GRID_CELL_SIZE + GRID_CELL_SIZE / 2;
-}
-void pixel_pos_to_player_pos(Point *pixel_pos, Point *player_pos){
-    player_pos->x = (pixel_pos->x - GRID_OFFSET_SIZE) / GRID_CELL_SIZE;
-    player_pos->y = (pixel_pos->y - GRID_OFFSET_SIZE) / GRID_CELL_SIZE;
-}
 
 void draw_game(App *app){
     // Game *game = app->game;
@@ -101,10 +124,27 @@ void draw_game(App *app){
 }
 
 
+void draw_player(App *app, Player *player){
+    if (player == app->game->playerA)   SDL_SetRenderDrawColor(app->renderer, PLAYERA_COLOR);
+    else                                SDL_SetRenderDrawColor(app->renderer, PLAYERB_COLOR);
+    
+    for (int i = 0; i < NUM_PAWNS; i++){
+        Pawn *pawn = player->pawns[i];
 
+        int x = GRID_OFFSET_SIZE + pawn->pos.x * GRID_CELL_SIZE + GRID_CELL_SIZE / 2;
+        int y = GRID_OFFSET_SIZE + pawn->pos.y * GRID_CELL_SIZE + GRID_CELL_SIZE / 2;
+
+        SDL_RenderFillCircle(app->renderer, x, y, PLAYER_RADIUS);
+    }
+
+    // DRAW DAMES
+    
+}
 void draw_players(App *app){
     // Point p;
     // Game *game = app->game;
+    draw_player(app, app->game->playerA);
+    draw_player(app, app->game->playerB);
 
 
 }
@@ -125,7 +165,7 @@ void draw_grid(App *app){
     // Draw the actual grid
     for (int y = 0; y < GRID_SIZE; y++){
         for (int x = 0; x < GRID_SIZE; x++){
-            if ((x + y) % 2 == 0) {
+            if ((x + y) % 2 != 0) {
                 SDL_SetRenderDrawColor(app->renderer, ODD_COLOR);
                 SDL_RenderFillRect(app->renderer, &r);
             }                  
