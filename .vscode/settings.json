@@ -11,6 +11,7 @@
     "files.associations": {
         "game.h": "c",
         "app.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "types.h": "c"
     }
 }
