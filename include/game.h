@@ -44,6 +44,14 @@
 #define PLAYER_RADIUS_PRC 6/10 // prc of the grid size
 #define PLAYER_RADIUS (GRID_CELL_SIZE * PLAYER_RADIUS_PRC / 2) 
 
+#define PLAYER_HOVER_PRC 12 / 10
+#define PLAYER_HOVER_DIST_SQ (PLAYER_RADIUS * PLAYER_HOVER_PRC) * (PLAYER_RADIUS * PLAYER_HOVER_PRC)
+
+#define DAME_LINE_LEN_PRC 4 / 10
+#define DAME_LINE_LEN (PLAYER_RADIUS * DAME_LINE_LEN_PRC)
+
+#define PLAYER_INDICATOR_WIDTH WIDTH * 2 / 10
+
 // Player A
 #define PLAYERA_NAME "Odd player"
 #define PLAYERA_COLOR 0,0,0,255
@@ -77,6 +85,9 @@ typedef struct {
     Player *playerA;
     Player *playerB;
     Player *current_turn;
+
+    Pawn *dragged_pawn;
+    Pawn ***grid;
 } Game;
 
 #include "app.h"
@@ -87,16 +98,21 @@ void delete_point(Point *point);
 
 // PLAYER
 Player *create_player(char name[], bool even_player);
-bool player_can_move_pawn(Player *player, Game *game); // TODO 
 bool wall_block_path(Game *game, Point a, Point b); // returns true if a wall blocks the path
 void update_next_pawn_position(Game *game, int *current_overflow_index, int i, int dx, int dy); // helper function for available_pawn_positions
 void update_available_pawn_positions(Game *game); // fils available positions with the possible positions
-bool player_can_place_pawn(Game *game, Point p); // TODO: Return true if the player current dragging a pawn can place here 
 void delete_player(Player *player);
 
 //PAWN
 Pawn *create_pawn(Player *owner, int x, int y);
 void delete_pawn(Pawn *pawn);
+
+bool player_can_play(App *app, Pawn *pawn);
+void drag_pawn(App *app, Pawn *pawn);
+bool can_place_pawn_here(App *app, int gx, int gy);
+void place_pawn(App *app, int gx, int gy);
+void reset_pawn_position(App *app);
+void change_turn(App *app);
 
 
 // GAMEX
@@ -104,12 +120,15 @@ Game *create_game(char playerA_name[], char playerB_name[]);
 void delete_game(Game *game);
 
 
-
 /**
  * @brief change the current player playing
  */
 void draw_game(App *app);
+void draw_pawn(App *app, Pawn *pawn);
 void draw_players(App *app);
 void draw_grid(App *app);
+
+int distance_to_closest_pawn(App *app, int *gx, int *gy); // distance squared actually
+
 
 #endif

@@ -114,7 +114,21 @@ void handle_events(App *app){
             } 
         } else if (e.type == SDL_MOUSEBUTTONDOWN){
             if (e.button.button == SDL_BUTTON_LEFT){
-                
+                // When we click, check if we are on a pawn
+
+                int gx = -1;
+                int gy = -1;
+                int d = distance_to_closest_pawn(app, &gx, &gy);
+                if (d < PLAYER_HOVER_DIST_SQ){
+                    // Check if there is a pawn here
+                    Pawn *pawn = app->game->grid[gx][gy];
+                    if (pawn != NULL){
+                        // If the player can drag a pawn, do it
+                        if (player_can_play(app, pawn)){
+                            drag_pawn(app, pawn);
+                        }
+                    }
+                }
                 
             } else if (e.button.button == SDL_BUTTON_RIGHT){
                 
@@ -122,7 +136,17 @@ void handle_events(App *app){
             }
         } else if (e.type == SDL_MOUSEBUTTONUP){
             if (e.button.button == SDL_BUTTON_LEFT){
-                
+                if (app->game->dragged_pawn != NULL) {
+                    int gx = -1;
+                    int gy = -1;
+                    distance_to_closest_pawn(app, &gx, &gy);
+                    if (can_place_pawn_here(app, gx, gy)){
+                        place_pawn(app, gx, gy);
+                        change_turn(app);
+                    } else {
+                        reset_pawn_position(app);
+                    }
+                }
                 
             }
         }
