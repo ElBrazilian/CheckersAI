@@ -12,7 +12,7 @@
 #define TIME_KEEPER_H
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
+#include "SDL_ttf.h"
 
 #define NUM_AVERAGES 500
 #define NUM_AVERAGES_FL 500.0

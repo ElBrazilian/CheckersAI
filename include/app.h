@@ -12,7 +12,6 @@
 #define APP_H
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
 
 #include "timekeeper.h"
 #include "game.h"

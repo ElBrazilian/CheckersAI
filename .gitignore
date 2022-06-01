@@ -3,3 +3,4 @@ game.o
 timekeeper.o
 main.o
 SDL_render.o
+SDL_ttf.o
