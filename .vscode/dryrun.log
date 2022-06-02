@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/home/promo24/n.schiffmacher/Documents/ElectifAI/CheckersAI'
+rm -f *.o
+find . -maxdepth 1 -executable -type f \( ! -name "Makefile" \) -delete
+make: Leaving directory `/home/promo24/n.schiffmacher/Documents/ElectifAI/CheckersAI'
+ 

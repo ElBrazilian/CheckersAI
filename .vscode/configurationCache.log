@@ -1,0 +1,1 @@
+{"buildTargets":["check-syntax","clean","compile-all","doc","launch-tests","main","run","test-tileset","test-timekeeper"],"launchTargets":[],"customConfigurationProvider":{"workspaceBrowse":{"browsePath":[],"compilerArgs":[]},"fileIndex":[]}}

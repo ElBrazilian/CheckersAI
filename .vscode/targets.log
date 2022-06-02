@@ -1,0 +1,495 @@
+make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+# GNU Make 3.82
+# Built for x86_64-redhat-linux-gnu
+# Copyright (C) 2010  Free Software Foundation, Inc.
+# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+# This is free software: you are free to change and redistribute it.
+# There is NO WARRANTY, to the extent permitted by law.
+
+# Make data base, printed on Thu Jun  2 08:06:42 2022
+
+# Variables
+
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# automatic
+?F = $(notdir $?)
+# environment
+DESKTOP_SESSION = gnome-classic
+# environment
+OPAM_SWITCH_PREFIX = /usr/local/opam/default
+# default
+.SHELLFLAGS := -c
+# environment
+OCAML_TOPLEVEL_PATH = /usr/local/opam/default/lib/toplevel
+# environment
+XDG_SESSION_TYPE = x11
+# environment
+MODULEPATH = /usr/share/Modules/modulefiles:/etc/modulefiles
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# environment
+XAUTHORITY = /run/gdm/auth-for-n.schiffmacher-9661t6/database
+# environment
+GDMSESSION = gnome-classic
+# environment
+XMODIFIERS = @im=ibus
+# makefile
+CURDIR := /home/promo24/n.schiffmacher/Documents/ElectifAI/CheckersAI
+# makefile
+SHELL = /bin/sh
+# environment
+DN = /usr/local/lsprepost4.6_centos7
+# environment
+GDM_LANG = C
+# environment
+VTE_VERSION = 5204
+# environment
+VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
+# environment
+_ = /usr/bin/make
+# makefile (from `Makefile', line 5)
+CFLAGS = -g -std=c99 -Wall $(_OPT) $(_GUI) $(_DEBUG) -I./include -I/usr/include/freetype2
+# environment
+LESSOPEN = ||/usr/bin/lesspipe.sh %s
+# makefile (from `Makefile', line 1)
+MAKEFILE_LIST :=  Makefile
+# automatic
+@F = $(notdir $@)
+# environment
+VSCODE_NODE_CACHED_DATA_DIR = /home/promo24/n.schiffmacher/.config/Code/CachedData/ea3859d4ba2f3e577a159bc91e3074c5d85c0523
+# environment
+USERNAME = n.schiffmacher
+# environment
+XDG_DATA_DIRS = /home/promo24/n.schiffmacher/.local/share/flatpak/exports/share/:/var/lib/flatpak/exports/share/:/usr/local/share/:/usr/share/
+# environment
+DBUS_SESSION_BUS_ADDRESS = unix:abstract=/tmp/dbus-ozDRcqG28B,guid=2b146a9acd30c4c7785b791e629852cf
+# environment
+LSTC_LICENSE_SERVER = iatchoumitcheva.isae.fr
+# environment
+GIO_LAUNCHED_DESKTOP_FILE_PID = 10778
+# environment
+VSCODE_IPC_HOOK_EXTHOST = /run/user/347173/vscode-ipc-6cd04f7e-05a9-43f1-9c05-3daa4044cd6b.sock
+# environment
+HISTCONTROL = ignoredups
+# environment
+PATH = /usr/local/gcc-11.1.0//bin:/home/promo24/n.schiffmacher/.local/bin:/home/promo24/n.schiffmacher/bin:/usr/local/gcc-11.1.0/bin:/usr/local/anaconda3.7/bin:/usr/local/anaconda3.7/condabin:/home/promo24/n.schiffmacher/.local/bin:/home/promo24/n.schiffmacher/bin:/usr/local/git-2.31.1/bin:/usr/local/TLAToolbox-1.7.1:/usr/local/lsprepost4.6_centos7:/usr/local/ls-dyna-r10.1.0/bin:/usr/local/opam/default/bin:/usr/local/ptII/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/FF-v2.3:/usr/local/Procosa/Edipet-distrib:/usr/local/sarsop/src:/opt/puppetlabs/bin:/usr/local/FF-v2.3:/usr/local/Procosa/Edipet-distrib
+# environment
+LM_LICENSE_FILE = 27000@licensec7:27000@license
+# environment
+QT_GRAPHICSSYSTEM_CHECKED = 1
+# environment
+C_INCLUDE_PATH = /usr/local/gcc-11.1.0//include
+# environment
+SESSION_MANAGER = local/unix:@/tmp/.ICE-unix/9602,unix/unix:/tmp/.ICE-unix/9602
+# environment
+XDG_RUNTIME_DIR = /run/user/347173
+# environment
+FPATH = /usr/local/gcc-11.1.0//include
+# environment
+BREAKPAD_DUMP_LOCATION = /home/promo24/n.schiffmacher/.config/Code/exthost Crash Reports
+# environment
+XDG_MENU_PREFIX = gnome-
+# environment
+VSCODE_LOG_STACK = false
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# makefile (from `Makefile', line 6)
+LDFLAGS = -lSDL2 -lfreetype -lm
+# default
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver check-symlink
+# environment
+LS_COLORS = rs=0:di=38;5;27:ln=38;5;51:mh=44;38;5;15:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=05;48;5;232;38;5;15:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;34:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.Z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.mov=38;5;13:*.mpg=38;5;13:*.mpeg=38;5;13:*.m2v=38;5;13:*.mkv=38;5;13:*.webm=38;5;13:*.ogm=38;5;13:*.mp4=38;5;13:*.m4v=38;5;13:*.mp4v=38;5;13:*.vob=38;5;13:*.qt=38;5;13:*.nuv=38;5;13:*.wmv=38;5;13:*.asf=38;5;13:*.rm=38;5;13:*.rmvb=38;5;13:*.flc=38;5;13:*.avi=38;5;13:*.fli=38;5;13:*.flv=38;5;13:*.gl=38;5;13:*.dl=38;5;13:*.xcf=38;5;13:*.xwd=38;5;13:*.yuv=38;5;13:*.cgm=38;5;13:*.emf=38;5;13:*.axv=38;5;13:*.anx=38;5;13:*.ogv=38;5;13:*.ogx=38;5;13:*.aac=38;5;45:*.au=38;5;45:*.flac=38;5;45:*.mid=38;5;45:*.midi=38;5;45:*.mka=38;5;45:*.mp3=38;5;45:*.mpc=38;5;45:*.ogg=38;5;45:*.ra=38;5;45:*.wav=38;5;45:*.axa=38;5;45:*.oga=38;5;45:*.spx=38;5;45:*.xspf=38;5;45:
+# environment
+XDG_SESSION_DESKTOP = gnome-classic
+# environment
+SSH_AUTH_SOCK = /run/user/347173/keyring/ssh
+# environment
+CPLUS_INCLUDE_PATH = /usr/local/gcc-11.1.0//include
+# automatic
+%F = $(notdir $%)
+# environment
+HTTPS_PROXY = http://proxy.isae.fr:3128
+# environment
+CONDA_EXE = /usr/local/anaconda3.7/bin/conda
+# makefile (from `Makefile', line 3)
+_OPT = $(if $(OPT),-O3 -flto,)
+# environment
+IMSETTINGS_INTEGRATE_DESKTOP = yes
+# environment
+PWD = /home/promo24/n.schiffmacher/Documents/ElectifAI/CheckersAI
+# environment
+XDG_SEAT = seat0
+# environment
+SSH_AGENT_PID = 9731
+# environment
+PKG_CONFIG_PATH = /usr/local/opam/default/lib/pkgconfig
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = GNOME-Classic:GNOME
+# environment
+MANPATH = /usr/local/gcc-11.1.0//share/man:/usr/share/man:/usr/local/share/man:/usr/local/opam/default/man:/opt/puppetlabs/puppet/share/man
+# environment
+HOME = /home/promo24/n.schiffmacher
+# environment
+LD_LIBRARY_PATH = /usr/local/gcc-11.1.0//lib64
+# environment
+LSTC_LICENSE = network
+# environment
+VSCODE_CLI = 1
+# environment
+MODULESHOME = /usr/share/Modules
+# environment
+LOGNAME = n.schiffmacher
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+# environment
+CONDA_PROMPT_MODIFIER = (base) 
+# automatic
++F = $(notdir $+)
+# environment
+ELECTRON_NO_ATTACH_CONSOLE = 1
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# default
+MAKE_VERSION := 3.82
+# environment
+GNOME_DESKTOP_SESSION_ID = this-is-deprecated
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# environment
+HOSTNAME = pcb61-06-08
+# environment
+XDG_VTNR = 1
+# environment
+MAKELEVEL := 0
+# environment
+LD_RUN_PATH = /usr/local/gcc-11.1.0//lib64
+# environment
+VERBOSE_LOGGING = true
+# environment
+COLORTERM = truecolor
+# default
+MAKE = $(MAKE_COMMAND)
+# default
+MAKECMDGOALS := all
+# environment
+QT_IM_MODULE = ibus
+# environment
+SHLVL = 4
+# makefile (from `Makefile', line 4)
+CC = gcc
+# environment
+GNOME_SHELL_SESSION_MODE = classic
+# environment
+XDG_SESSION_ID = 67
+# environment
+AMD_ENTRYPOINT = vs/workbench/services/extensions/node/extensionHostProcess
+# environment
+USER = n.schiffmacher
+# environment
+CAML_LD_LIBRARY_PATH = /usr/local/opam/default/lib/stublibs:/usr/local/opam/default/lib/ocaml/stublibs:/usr/local/opam/default/lib/ocaml
+# makefile
+.DEFAULT_GOAL := clean
+# environment
+INCLUDE = /usr/local/gcc-11.1.0//include
+# environment
+XDG_CURRENT_DESKTOP = GNOME-Classic:GNOME
+# makefile (from `Makefile', line 2)
+_DEBUG = $(if $(DEBUG),-D DEBUG,)
+# environment
+PIPE_LOGGING = true
+# automatic
+%D = $(patsubst %/,%,$(dir $%))
+# environment
+define BASH_FUNC_module()
+() {  eval `/usr/bin/modulecmd bash $*`
+}
+endef
+# environment
+WINDOWPATH = 1
+# makefile (from `Makefile', line 1)
+_GUI = $(if $(NOGUI),, -D GUI)
+# environment
+CONDA_SHLVL = 1
+# default
+MAKE_COMMAND := make
+# default
+.VARIABLES := 
+# environment
+IMSETTINGS_MODULE = none
+# automatic
+*F = $(notdir $*)
+# environment
+VSCODE_IPC_HOOK = /run/user/347173/vscode-77ee319e-1.52.1-main.sock
+# makefile
+MAKEFLAGS = Rrqp
+# environment
+MFLAGS = -Rrqp
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# environment
+MAIL = /var/spool/mail/n.schiffmacher
+# environment
+LOADEDMODULES = ptII/r11-devel:opam/2021-2022:matlab/2021a:HPP/HPP:ls-dyna/r10.1.0:lsprepost/4.6:TLAToolbox/1.7.1:sarsop:git/2.31.1:vscode_ext:netbeans/8.2:gcc/11.1.0
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# environment
+OPAMSOFTS_HOME = /usr/local/opam
+# environment
+LC_PAPER = fr_FR
+# environment
+NO_AT_BRIDGE = 1
+# environment
+FF_HOME = /usr/local/FF-v2.3
+# environment
+HTTP_PROXY = http://proxy.isae.fr:3128
+# environment
+DISPLAY = :0
+# default
+MAKEFILES := 
+# automatic
+<F = $(notdir $<)
+# environment
+_LMFILES_ = /etc/modulefiles/ptII/r11-devel:/etc/modulefiles/opam/2021-2022:/etc/modulefiles/matlab/2021a:/etc/modulefiles/HPP/HPP:/etc/modulefiles/ls-dyna/r10.1.0:/etc/modulefiles/lsprepost/4.6:/etc/modulefiles/TLAToolbox/1.7.1:/etc/modulefiles/sarsop:/etc/modulefiles/git/2.31.1:/etc/modulefiles/vscode_ext:/etc/modulefiles/netbeans/8.2:/etc/modulefiles/gcc/11.1.0
+# environment
+PTII = /usr/local/ptII
+# environment
+https_proxy = http://proxy.isae.fr:3128
+# environment
+CONDA_DEFAULT_ENV = base
+# environment
+OPAMROOT = /usr/local/opam
+# environment
+LC_ALL = C
+# environment
+CONDA_PYTHON_EXE = /usr/local/anaconda3.7/bin/python
+# environment
+GJS_DEBUG_TOPICS = JS ERROR;JS LOG
+# environment
+GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/b088e1ee_db9b_44b3_bba6_deceffd9674b
+# automatic
+^F = $(notdir $^)
+# environment
+GNOME_TERMINAL_SERVICE = :1.118
+# default
+SUFFIXES := 
+# environment
+HISTSIZE = 1000
+# environment
+_CE_M = 
+# environment
+CHROME_DESKTOP = code-url-handler.desktop
+# environment
+CRASH_REPORTER_START_OPTIONS = {"companyName":"Microsoft","productName":"VSCode","submitURL":"appcenter://code?aid=fba07a4d-84bd-4fc8-a125-9640fc8ce171&uid=f73076ac-ba44-4b1f-9948-87dc965da4f1&iid=f73076ac-ba44-4b1f-9948-87dc965da4f1&sid=f73076ac-ba44-4b1f-9948-87dc965da4f1","uploadToServer":true}
+ 
+make: *** No rule to make target `all'.  Stop.
+ 
+# default
+.INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
+# environment
+GJS_DEBUG_OUTPUT = stderr
+# default
+.RECIPEPREFIX := 
+# environment
+http_proxy = http://proxy.isae.fr:3128
+# environment
+GIO_LAUNCHED_DESKTOP_FILE = /usr/share/applications/code.desktop
+# environment
+CONDA_PREFIX = /usr/local/anaconda3.7
+# environment
+TERM = xterm-256color
+# environment
+VSCODE_PID = 10778
+# environment
+_CE_CONDA = 
+# environment
+LANG = C
+# variable set hash-table stats:
+# Load=145/1024=14%, Rehash=0, Collisions=24/167=14%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# . (device 48, inode 3255016267): 16 files, no impossibilities.
+# src (device 48, inode 2154389404): No files, no impossibilities so far.
+# tests: could not be stat'd.
+
+# 16 files, no impossibilities in 3 directories.
+
+# Implicit Rules
+
+%.o: src/%.c
+#  recipe to execute (from `Makefile', line 17):
+	$(CC) $(CFLAGS) -o $@ -c $^
+
+%.o: tests/%.c
+#  recipe to execute (from `Makefile', line 20):
+	$(CC) $(CFLAGS) -o $@ -c $^
+
+# 2 implicit rules, 0 (0.0%) terminal.
+
+# Files
+
+# Not a target:
+timekeeper.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+all:
+#  Command line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has not been updated.
+
+.PHONY: clean doc check-syntax compile-all launch-tests
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+test_tileset.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+.SUFFIXES:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+Makefile:
+#  Implicit rule search has been done.
+#  Last modified 2022-06-01 08:21:14.133709299
+#  File has been updated.
+#  Successfully updated.
+
+test-tileset: test_tileset.o timekeeper.o tileset.o
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from `Makefile', line 33):
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+# Not a target:
+tileset.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+SDL_render.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+run: main
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from `Makefile', line 27):
+	./main
+
+compile-all:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+
+clean:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  recipe to execute (from `Makefile', line 12):
+	- rm -f *.o
+	- find . -maxdepth 1 -executable -type f \( ! -name "Makefile" \) -delete
+
+# Not a target:
+test_timekeeper.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+game.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+launch-tests:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+
+main: main.o game.o timekeeper.o SDL_render.o SDL_ttf.o
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from `Makefile', line 24):
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+# Not a target:
+main.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+test-timekeeper: test_timekeeper.o timekeeper.o
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from `Makefile', line 30):
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+# Not a target:
+SDL_ttf.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+check-syntax:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+
+doc:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+
+# files hash-table stats:
+# Load=22/1024=2%, Rehash=0, Collisions=0/49=0%
+# VPATH Search Paths
+
+# No `vpath' search paths.
+
+# No general (`VPATH' variable) search path.
+
+# # of strings in strcache: 0 / lookups = 59 / hits = 59
+# # of strcache buffers: 1 (* 8176 B/buffer = 8176 B)
+# strcache used: total = 0 (333) / max = 0 / min = 8176 / avg = 0
+# strcache free: total = 0 (7843) / max = 0 / min = 8176 / avg = 0
+
+# strcache hash-table stats:
+# Load=37/8192=0%, Rehash=0, Collisions=1/59=2%
+# Finished Make data base on Thu Jun  2 08:06:43 2022
+
+ 
