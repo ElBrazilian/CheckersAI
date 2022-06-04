@@ -53,9 +53,11 @@ void init_board(void)
 }
 void print_board(void)
 {
+    printf("   1 2 3 4 5 6 7 8 9 10\n");
     for (int y=1; y<sizeY-1; y++) {
+        printf("%2d ", y);
         for (int x=1; x<sizeX-1; x++)
-            printf("%d",board[x][y]);
+            printf("%d ",board[x][y]);
         printf("\n");
     }
 }
@@ -102,11 +104,9 @@ bool piece_can_jump(int pos){
             }
 
         } else {
-            if (dy == forward_direction(color(piece))){
-                int neigh = board[x+dx][y+dy];
-                if (are_opponents(piece, neigh) && board[x+2*dx][y+2*dy] == EMPTY){
-                    can_jump = true;
-                }
+            int neigh = board[x+dx][y+dy];
+            if (are_opponents(piece, neigh) && board[x+2*dx][y+2*dy] == EMPTY){
+                can_jump = true;
             }
         }
     }
@@ -145,7 +145,6 @@ void memorize_best_move(int from, int to)
 int best_jump(int positions[], int jump_num, int best_eval_so_far, int alpha, int beta)
 {
     int x = coordX(positions[jump_num]), y = coordY(positions[jump_num]);
-    printf("best jump from (%d, %d)\n", x, y);
     // print_board();
 
     int jumping_piece = board[x][y];
@@ -159,33 +158,25 @@ int best_jump(int positions[], int jump_num, int best_eval_so_far, int alpha, in
         if (is_king(jumping_piece)){
             // on commence par regarder si on peut "manger"
             int nx = x+dx, ny = y+dy;
-            while ((1 <= nx && nx < sizeX-1 && 1 <= ny && ny < sizeY-1) && !are_opponents(jumping_piece, board[nx][ny]) && (board[nx][ny] == EMPTY || !is_eaten(board[nx][ny]))){
+            while ((1 <= nx && nx < sizeX-1 && 1 <= ny && ny < sizeY-1) && !are_opponents(jumping_piece, board[nx][ny])){
                 nx += dx;
                 ny += dy;
             }
 
             // check if current one is actually opponent and if next one is empty
-            if (are_opponents(jumping_piece, board[nx][ny])){
+            if (are_opponents(jumping_piece, board[nx][ny]) && !is_eaten(board[nx][ny])){
                 if (board[nx + dx][ny + dy] == EMPTY){
-                    // Si on peut manger, ie board[x][y] est celui qui mange et board[nx][ny] est un adversaire et board[nx+dx][ny+dy] est vide 
                     can_jump = true;
-                    // positions[jump_num+1] = std_position(nx + dx, ny + dy);
 
                     int ex = nx, ey = ny; // position of the eaten piece
-                    board[ex][ey] |= EATEN; // SHOULD BE EATEN
+                    board[ex][ey] |= EATEN; 
                     board[x][y] = EMPTY;
-
-                    // DO JUMP
-                    // board[nx+dx][ny+dy] = board[x][y];
-                    // board[x][y] = EMPTY;
-                    // board[nx][ny] = EMPTY;
 
                     nx += dx;
                     ny += dy;
                     while ((1 <= nx && nx < sizeX-1 && 1 <= ny && ny < sizeY-1) && board[nx][ny] == EMPTY) {
                         // do jump
                         board[nx][ny] = jumping_piece;
-                        printf("%d\n", jump_num);
                         positions[jump_num+1] = std_position(nx, ny);
 
                         best_eval_so_far = best_jump(positions, jump_num+1, best_eval_so_far, alpha, beta);
@@ -240,7 +231,7 @@ int main(){
     int max_eval = best_jump(pos, 0, best_eval_so_far, alpha, beta);
     printf("(%d, %d) = %d => %d (best_nb_jumps = %d)\n", coordX(from), coordY(from), board[coordX(from)][coordY(from)], max_eval, best_nb_jumps);
     for (int i = 0; i < best_nb_jumps + 1; i++){
-        printf("(%d, %d): %d\n", coordX(pos[i]), coordY(pos[i]), pos[i]);
+        printf("(%d, %d): %d\n", coordX(best_move_positions[i]), coordY(best_move_positions[i]), best_move_positions[i]);
     }
 
 
