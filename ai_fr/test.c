@@ -73,27 +73,46 @@ void print_board(void)
     }
     fflush(stderr);
 }
-int eval_board(int player_color){
+int eval_board(){
     int res = 0;
     for (int pos = 1; pos < 51; pos++){
         int x = coordX(pos), y = coordY(pos);
         int piece = board[x][y];
 
         if (piece != EMPTY){
-            int sign = (color(piece) == player_color) ? 1 : -1;
+            int sign = (color(piece) == IA_color) ? 1 : -1;
             int weight = (is_king(piece)) ? 2 : 1;
             res += sign * weight;
         }
     }
     return res;
 }
+void load_board(){
+    for (int x=0; x<sizeX; x++) for (int y=0; y<sizeY; y++)
+        board[x][y] = EMPTY;
+    for (int x=0; x<sizeX; x++)
+        board[x][0] = board[x][sizeY-1] = OUTSIDE;
+    for (int y=0; y<sizeY; y++)
+        board[0][y] = board[sizeX-1][y] = OUTSIDE;
+        
+    FILE *file = NULL;
+    file = fopen("board.txt", "r");
+    for (int y=1; y<sizeY-1; y++){
+        for (int x=1; x<sizeX-1; x++){
+            board[x][y] = (fgetc(file) - '0');
+        }
+        fgetc(file);
+    }
+    fclose(file);
+}
 
-int best_move_positions[12000];
-int eaten_positions[12000];
+int best_move_positions[MAX_JUMPS];
+int eaten_positions[MAX_JUMPS + 1];
 int best_nb_jumps=0;
-void memorize_best_jump(int positions[12000], int eaten[12000], int nb_jumps)
+void memorize_best_jump(int positions[MAX_JUMPS], int eaten[MAX_JUMPS + 1], int nb_jumps)
 {
     memcpy(best_move_positions, positions, sizeof(best_move_positions));
+    memcpy(eaten_positions, eaten, sizeof(eaten_positions));
     best_nb_jumps = nb_jumps;
 }
 
@@ -103,7 +122,7 @@ void memorize_best_move(int from, int to)
     best_move_positions[1] = to;
     best_nb_jumps = 0;
 }
-int best_jump(int player_color, int positions[], int eaten[],  int jump_num, int best_eval_so_far, int alpha, int beta)
+int best_jump(int positions[], int eaten[],  int jump_num, int best_eval_so_far, int alpha, int beta)
 {
     int x = coordX(positions[jump_num]), y = coordY(positions[jump_num]);
     // print_board();
@@ -142,7 +161,7 @@ int best_jump(int player_color, int positions[], int eaten[],  int jump_num, int
                         board[nx][ny] = jumping_piece;
                         positions[jump_num+1] = std_position(nx, ny);
 
-                        best_eval_so_far = best_jump(player_color, positions, eaten, jump_num+1, best_eval_so_far, alpha, beta);
+                        best_eval_so_far = best_jump(positions, eaten, jump_num+1, best_eval_so_far, alpha, beta);
 
                         // Undo jump
                         board[nx][ny] = EMPTY;
@@ -160,17 +179,74 @@ int best_jump(int player_color, int positions[], int eaten[],  int jump_num, int
             if (are_opponents(jumping_piece, jumped_piece) && board[x+2*dx][y+2*dy]==EMPTY) {
                 can_jump = true;
                 positions[jump_num+1] = std_position(x+2*dx,y+2*dy);
+                eaten[jump_num] = std_position(x+dx, y+dy);
                 do_piece_jump(x, y, dx, dy);
-                best_eval_so_far = best_jump(player_color, positions, eaten, jump_num+1, best_eval_so_far, alpha, beta);
+                best_eval_so_far = best_jump(positions, eaten, jump_num+1, best_eval_so_far, alpha, beta);
                 undo_piece_jump(x, y, dx, dy, jumped_piece);
             }
         }
     }
     if (!can_jump) { // feuille de l'arbre des prises : on évalue le coup
-        int eval = jump_num * 10000 + eval_board(player_color); // remplacez par votre évaluation (alphabeta ou autre) !
+        int eval = jump_num * 10000 + eval_board(); // remplacez par votre évaluation (alphabeta ou autre) !
         if (eval > best_eval_so_far) {
             best_eval_so_far = eval;
             memorize_best_jump(positions, eaten, jump_num);
+        }
+    }
+    return best_eval_so_far;
+}
+bool piece_can_jump(int pos){
+    int piece = get_piece(pos);
+    int x = coordX(pos), y = coordY(pos);
+
+    bool can_jump = false;
+    for (int dir=0; dir<4; dir++) {
+        int dx = directions[dir].dx, dy = directions[dir].dy;
+
+        if (is_king(piece)){
+            int nx = x+dx, ny = y+dy;
+            while ((1 <= nx && nx < sizeX-1 && 1 <= ny && ny < sizeY-1) && !are_opponents(piece, board[nx][ny])){
+                nx += dx;
+                ny += dy;
+            }
+
+            // check if current one is actually opponent and if next one is empty
+            if (are_opponents(piece, board[nx][ny])){
+                if (board[nx + dx][ny + dy] == EMPTY){
+                    can_jump = true;
+                }
+            }
+
+        } else {
+            int neigh = board[x+dx][y+dy];
+            if (are_opponents(piece, neigh) && board[x+2*dx][y+2*dy] == EMPTY){
+                can_jump = true;
+            }
+        }
+    }
+    return can_jump;
+}
+bool someone_can_jump(int color)
+{
+    for (int pos=1; pos<=50; pos++) 
+        if (are_same_color(get_piece(pos),color) && piece_can_jump(pos))
+            return true;
+    return false;
+}
+int best_move(int from_pos, int best_eval_so_far, int alpha, int beta)
+{
+    int piece = get_piece(from_pos);
+    int x = coordX(from_pos), y = coordY(from_pos);
+    for (int dir=0; dir<4; dir++) {
+        int dx = directions[dir].dx, dy = directions[dir].dy;
+        if (!is_king(piece) && dy!=forward_direction(color(piece)))
+            continue; // les pions ne vont que vers l'avant
+        if (board[x+dx][y+dy]==EMPTY) {
+            int eval = rand(); // remplacez par votre évaluation
+            if (eval > best_eval_so_far) {
+                best_eval_so_far = eval;
+                memorize_best_move(from_pos, std_position(x+dx,y+dy));
+            }
         }
     }
     return best_eval_so_far;
@@ -186,18 +262,37 @@ typedef struct Move {
     int jumps_pos[MAX_JUMPS];
     int positions[MAX_JUMPS + 1];
 } Move;
+void init_move(Move *move){
+    move->from = 0;
+    move->to = 0;
+    move->num_jumps = 0;
+    for (int i = 0; i < MAX_JUMPS; i++){
+        move->jumps_pos[i] = 0;
+        move->positions[i] = 0;
+    }
+    move->positions[MAX_JUMPS] = 0;
+}
 
 void generate_eaten_pos(Move *move){
-    move->positions[0] = move->from;
     int positions[MAX_JUMPS + 1];
     int eaten[MAX_JUMPS];
-    best_jump(0, positions, eaten, 0, 0, 0,0);
+    for (int i = 0; i < MAX_JUMPS; i++){
+        positions[i] = -1;
+        eaten[i] = -1;
+    }
+    positions[MAX_JUMPS] = -1;
+
+    // move->positions[best_nb_jumps] = positions[best_nb_jumps];
+
+    positions[0] = move->from;
+    best_jump(positions, eaten, 0, 0, 0,0);
 
     for (int i = 0; i < best_nb_jumps; i++){
-        move->positions[i] = positions[i];
-        move->jumps_pos[i] = eaten[i];
+        move->positions[i] = best_move_positions[i];
+        move->jumps_pos[i] = eaten_positions[i];
     }
-    move->positions[best_nb_jumps] = positions[best_nb_jumps];
+    move->positions[best_nb_jumps] = best_move_positions[best_nb_jumps];
+    move->num_jumps = best_nb_jumps;
 }
 // return true if it's a jump, false if it's a regular move
 bool read_move(Move *move){
@@ -205,8 +300,13 @@ bool read_move(Move *move){
     fflush(stdin); bool is_jump = (fgetc(stdin) == 'x');
     fflush(stdin); fscanf(stdin, "%d", &(move->to));
 
-    if (is_jump) generate_eaten_pos(move);
+    if (is_jump){
+        generate_eaten_pos(move);
+
+    }
     else move->num_jumps = 0;
+
+
     
     return is_jump;
 }
@@ -231,39 +331,82 @@ void update_board(Move move){
         int x = coordX(move.jumps_pos[i]), y = coordY(move.jumps_pos[i]);
         board[x][y] = EMPTY;
     }
-}
 
+    /* promotion en dame */
+    if ((c==BLACK && move.to>28) || (c==WHITE && move.to<5))
+        set_piece(move.to,promote_king(board[coordX(move.to)][coordY(move.to)]));
+}
+void compute_move(Move *move){
+    int alpha = -100000, beta = 1000000;
+    int best_eval_so_far = -10000000;
+    int positions[MAX_JUMPS + 1];
+    int eaten[MAX_JUMPS];
+    for (int i = 0; i < MAX_JUMPS; i++){
+        positions[i] = -1;
+        eaten[i] = -1;
+    }
+    positions[MAX_JUMPS] = -1;
+
+    fprintf(stderr, "start compute\n"); fflush(stderr);
+
+    // if someone can jump, jump
+    if (someone_can_jump(IA_color)) {
+        for (int pos=1; pos<=50; pos++)
+            if (are_same_color(get_piece(pos),IA_color) && piece_can_jump(pos)) {
+                positions[0] = pos;
+                best_eval_so_far = best_jump(positions, eaten, 0, best_eval_so_far, alpha, beta);
+                // if (best_eval_so_far > alpha) alpha = best_eval_so_far;
+            }
+    } else {
+        for (int pos=1; pos<=32; pos++)
+            if (are_same_color(get_piece(pos),IA_color)) {
+                best_eval_so_far = best_move(pos, best_eval_so_far, alpha, beta);
+                // if (best_eval_so_far > alpha) alpha = best_eval_so_far;
+            }
+    }
+
+    // Write the result to move
+    for (int i = 0; i < best_nb_jumps; i++){
+        move->positions[i] = best_move_positions[i];
+        move->jumps_pos[i] = eaten_positions[i];
+    }
+    move->positions[best_nb_jumps] = best_move_positions[best_nb_jumps];
+    move->num_jumps = best_nb_jumps;
+    move->from = best_move_positions[0];
+    move->to = best_move_positions[(best_nb_jumps == 0) ? 1 : best_nb_jumps];
+
+    fprintf(stderr, "done compute\n"); fflush(stderr);
+
+}
 
 int main(int argc, char *argv[]){
     IA_color = (int)(argv[1][0] - '0');
+    if (IA_color == 1) IA_color = WHITE;
+    else IA_color = BLACK;
+
     init_board();
+    // load_board();
 
-    int moves = 6;
-    int tmp[6][2] = {
-        {16,21},
-        {21,26},
-        {20,25},
-        {11,16},
-        {6,11},
-        {17,22}
-    };
-
-    // quand on envoie, faut mettre les pos intermédiaires
     Move move;
+    init_move(&move);
+    // read_move(&move);
 
-    for (int i = 0; i < moves; i++){
-        read_move(&move);
-        update_board(move);
-        // print_board();
-        // fprintf(stderr, "done reading move\n"); fflush(stderr);
+    sleep(5);
+    fprintf(stderr, "ready\n"); fflush(stderr);
+    fprintf(stderr, "%d\n", IA_color); fflush(stderr);
 
-        move.from = tmp[i][0];
-        move.to = tmp[i][1];
-        move.num_jumps = 0;
-        send_move(move);
+    int turn = WHITE;
+    while (true){
+        if (turn == IA_color){
+            fprintf(stderr, "pre start compute\n"); fflush(stderr);
+            compute_move(&move);
+            fprintf(stderr, "sending move\n"); fflush(stderr);
+            send_move(move);
+        } else {
+            read_move(&move);
+        }
         update_board(move);
-        // print_board();
-        // fprintf(stderr, "done sending move\n"); fflush(stderr);
+        turn = opponent_color(turn);
     }
 
 

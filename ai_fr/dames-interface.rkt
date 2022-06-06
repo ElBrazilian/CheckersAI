@@ -2,7 +2,7 @@
 (require racket/gui)
 
 ;; définitions modifiables pour configurer l'affichage
-(define SCALE 90)            ; taille en pixel des cases
+(define SCALE 50)            ; taille en pixel des cases
 (define pawn-size (* SCALE 2/3)); taille des pions dessinés
 (define queen-size (/ SCALE 3)); taille des dames
 (define black-color  "Red")   ; couleur des pions du joueur "noir"
