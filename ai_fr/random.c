@@ -142,7 +142,21 @@ void memorize_best_move(int from, int to)
     best_nb_jumps = 0;
 }
 
-int best_jump(int positions[], int jump_num, int best_eval_so_far, int alpha, int beta)
+int eval_board(int player_color){
+    int res = 0;
+    for (int pos = 1; pos < 51; pos++){
+        int x = coordX(pos), y = coordY(pos);
+        int piece = board[x][y];
+
+        if (piece != EMPTY){
+            int sign = (color(piece) == player_color) ? 1 : -1;
+            int weight = (is_king(piece)) ? 2 : 1;
+            res += sign * weight;
+        }
+    }
+    return res;
+}
+int best_jump(int player_color, int positions[], int jump_num, int best_eval_so_far, int alpha, int beta)
 {
     int x = coordX(positions[jump_num]), y = coordY(positions[jump_num]);
     // print_board();
@@ -179,7 +193,7 @@ int best_jump(int positions[], int jump_num, int best_eval_so_far, int alpha, in
                         board[nx][ny] = jumping_piece;
                         positions[jump_num+1] = std_position(nx, ny);
 
-                        best_eval_so_far = best_jump(positions, jump_num+1, best_eval_so_far, alpha, beta);
+                        best_eval_so_far = best_jump(player_color, positions, jump_num+1, best_eval_so_far, alpha, beta);
 
                         // Undo jump
                         board[nx][ny] = EMPTY;
@@ -198,13 +212,13 @@ int best_jump(int positions[], int jump_num, int best_eval_so_far, int alpha, in
                 can_jump = true;
                 positions[jump_num+1] = std_position(x+2*dx,y+2*dy);
                 do_piece_jump(x, y, dx, dy);
-                best_eval_so_far = best_jump(positions, jump_num+1, best_eval_so_far, alpha, beta);
+                best_eval_so_far = best_jump(player_color, positions, jump_num+1, best_eval_so_far, alpha, beta);
                 undo_piece_jump(x, y, dx, dy, jumped_piece);
             }
         }
     }
     if (!can_jump) { // feuille de l'arbre des prises : on évalue le coup
-        int eval = jump_num * 10000; // remplacez par votre évaluation (alphabeta ou autre) !
+        int eval = jump_num * 10000 + eval_board(player_color); // remplacez par votre évaluation (alphabeta ou autre) !
         if (eval > best_eval_so_far) {
             best_eval_so_far = eval;
             memorize_best_jump(positions, jump_num);
@@ -228,7 +242,7 @@ int main(){
     int alpha = INT_MIN, beta = INT_MAX;
     int pos[12000];
     pos[0] = from;
-    int max_eval = best_jump(pos, 0, best_eval_so_far, alpha, beta);
+    int max_eval = best_jump(IA_color, pos, 0, best_eval_so_far, alpha, beta);
     printf("(%d, %d) = %d => %d (best_nb_jumps = %d)\n", coordX(from), coordY(from), board[coordX(from)][coordY(from)], max_eval, best_nb_jumps);
     for (int i = 0; i < best_nb_jumps + 1; i++){
         printf("(%d, %d): %d\n", coordX(best_move_positions[i]), coordY(best_move_positions[i]), best_move_positions[i]);
