@@ -2,7 +2,7 @@
 (require racket/gui)
 
 ;; définitions modifiables pour configurer l'affichage
-(define SCALE 50)            ; taille en pixel des cases
+(define SCALE 90)            ; taille en pixel des cases
 (define pawn-size (* SCALE 2/3)); taille des pions dessinés
 (define queen-size (/ SCALE 3)); taille des dames
 (define black-color  "Red")   ; couleur des pions du joueur "noir"
@@ -406,7 +406,11 @@
 
             [else                 (set-piece! taken EMPTY) ; supprime le dernier pion pris
                                   (for ([taken taken-list]) (set-piece! taken EMPTY)) ; et tous les autres
-                                  (append (list "x" (last path) (first path) taken) taken-list)]))
+                                  (define dest (first path))
+                                  (when (or (and (= WHITE color) (< dest 6))
+                                            (and (= BLACK color) (> dest 45)))
+                                    (set-piece! dest (promote-queen piece)))
+                                  (append (list "x" (last path) dest taken) taken-list)]))
 
 
     (define (get-move color)
@@ -426,17 +430,16 @@
                         (or (queen? piece)
                             (= deltaY forward-direction)))
                    (and (queen? piece)
-                        (= (abs deltaX) (deltaY))
+                        (= (abs deltaX) (abs deltaY))
                         (= EMPTY (get-piece to))
-                        (empty-between? (coordX to) (coordY to) deltaX deltaY)))
+                        (empty-between? (coordX from) (coordY from) deltaX deltaY)))
                (set-piece! from EMPTY)
                (set-piece! to piece)
+               (when (or (and (= WHITE color) (< to 6))
+                         (and (= BLACK color) (> to 45)))
+                  (set-piece! to (promote-queen piece)))
                (list "-" from to)]
               [else (get-move color)]))
-      (define final-pos (last move))
-      (when (or (and (= WHITE color) (< final-pos 6))
-                (and (= BLACK color) (> final-pos 45)))
-        (set-piece! final-pos (promote-queen piece)))
       (sleep 1)
       move)
 
