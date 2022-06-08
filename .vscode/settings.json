@@ -1,5 +1,6 @@
 {
     "C_Cpp.default.includePath": [
+        "./ai/include/",
         "./include/",
         "/usr/include/",
         "/usr/include/SDL2/"
@@ -13,6 +14,7 @@
         "app.h": "c",
         "string.h": "c",
         "types.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "moves.h": "c"
     }
 }
