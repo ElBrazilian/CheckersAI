@@ -517,7 +517,6 @@ void compute_move(Move *move){
 }
 
 int main(int argc, char *argv[]){
-    all_possiblemove
     IA_color = (int)(argv[1][0] - '0');
     if (IA_color == 1) IA_color = WHITE;
     else IA_color = BLACK;
