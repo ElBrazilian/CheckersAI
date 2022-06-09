@@ -17,8 +17,6 @@ int forward_direction(int color) { return color==BLACK ? 1 : -1; }
 int std_position(int x, int y)   { return (x-1)/2 + 5*(y-1) + 1; }
 int coordY(int pos)              { return (pos-1)/5 + 1; }
 int coordX(int pos)              { return (pos-1)%5*2 + 2 - (pos-1)/5%2; }
-int get_piece(int pos)           { return board[coordX(pos)][coordY(pos)]; }
-void set_piece(int pos, int val) { board[coordX(pos)][coordY(pos)] = val; }
 
 void init_board(void)
 {
@@ -31,15 +29,15 @@ void init_board(void)
     }
     for (int y=0; y<sizeY; y++)
         board[0][y] = board[sizeX-1][y] = OUTSIDE;
-    for (int pos= 1; pos<=20; pos++) set_piece(pos,BLACK);
-    for (int pos=31; pos<=50; pos++) set_piece(pos,WHITE);
+    for (int pos= 1; pos<=20; pos++) board[coordX(pos)][coordY(pos)] = BLACK;
+    for (int pos=31; pos<=50; pos++) board[coordX(pos)][coordY(pos)] = WHITE;
 }
 void print_board(int tab[sizeX][sizeY])
 {
-    fprintf(stderr, "   1 2 3 4 5 6 7 8 9 10\n");
-    for (int y=1; y<sizeY-1; y++) {
+    fprintf(stderr, "   0  1 2 3 4 5 6 7 8 9 10 11\n");
+    for (int y=0; y<sizeY; y++) {
         fprintf(stderr, "%2d ", y);
-        for (int x=1; x<sizeX-1; x++){
+        for (int x=0; x<sizeX; x++){
             if (tab[x][y] == EMPTY) fprintf(stderr, "  ");
             else fprintf(stderr, "%d ",tab[x][y]);
         }
@@ -47,6 +45,12 @@ void print_board(int tab[sizeX][sizeY])
     }
     fflush(stderr);
 }
+
+#define PAWN_VALUE 100
+#define KING_ADDITIONNAL_VALUE 500
+#define DIST_FACTOR 5
+
+
 int eval_board(int tab[sizeX][sizeY]){
     int res = 0;
     int ones = 0, twos = 0;
@@ -55,15 +59,35 @@ int eval_board(int tab[sizeX][sizeY]){
         int piece = tab[x][y];
 
         if (piece != EMPTY){
-            int sign = (color(piece) == IA_color) ? 1 : -1;
-            if (sign == 1) ones++; else twos++;
-            int weight = (is_king(piece)) ? 2 : 1;
-            res += sign * weight;
+            int tmp_res = 0;
+            if (color(piece) == IA_color){
+                ones++;
+                tmp_res += PAWN_VALUE;
+
+                // distance au centre
+                int x_dist = 0; 
+                if (x < 5) x_dist = 5 - x;
+                else x_dist = x - 6;
+
+                tmp_res += DIST_FACTOR * x_dist;
+                if (is_king(piece)) tmp_res += KING_ADDITIONNAL_VALUE;
+            } else {
+                twos++;
+                tmp_res -= PAWN_VALUE;
+
+                int x_dist = 0; 
+                if (x < 5) x_dist = 5 - x;
+                else x_dist = x - 6;
+
+                tmp_res -= DIST_FACTOR * x_dist;
+                if (is_king(piece)) tmp_res -= KING_ADDITIONNAL_VALUE;
+            }
+            res += tmp_res;
         }
     }
     // fprintf(stderr, "%d %d\n", ones, twos); fflush(stderr);
-    if (ones == 0) return WIN; // l'IA a perdu
-    else if (twos == 0) return -WIN;
+    if (ones == 0) return -WIN; // l'IA a perdu
+    else if (twos == 0) return WIN;
     return res;
 }
 void load_board(){

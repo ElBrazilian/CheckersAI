@@ -13,31 +13,31 @@ void init_move(Move *move){
     move->positions[MAX_JUMPS] = 0;
 }
 
-void generate_eaten_pos(Move *move){
-    move->positions[0] = move->from;
+// void generate_eaten_pos(Move *move){
+//     move->positions[0] = move->from;
     
-    PossibleMoves possible_moves;
-    init_possible_moves(&possible_moves);
-    compute_moves_from_pos((IA_color == WHITE) ? BLACK : WHITE, board, move->from, &possible_moves);
+//     PossibleMoves possible_moves;
+//     init_possible_moves(&possible_moves);
+//     compute_moves_from_pos((IA_color == WHITE) ? BLACK : WHITE, board, move->from, &possible_moves);
 
-    for (int i = 0; i < possible_moves.current_move; i++){
-        if (possible_moves.all_possible_moves[i]->to == move->to && possible_moves.all_possible_moves[i]->from == move->from){
-            for (int j = 0; j < possible_moves.current_move; j++){
-                move->positions[j] = possible_moves.all_possible_moves[i]->positions[j];
-                move->jumps_pos[j] = possible_moves.all_possible_moves[i]->jumps_pos[j];
-            }
-            move->positions[possible_moves.current_move] = possible_moves.all_possible_moves[i]->positions[possible_moves.current_move];
-            move->num_jumps = possible_moves.all_possible_moves[i]->num_jumps;
-            break;
-        }
-    }
+//     for (int i = 0; i < possible_moves.current_move; i++){
+//         if (possible_moves.all_possible_moves[i]->to == move->to && possible_moves.all_possible_moves[i]->from == move->from){
+//             for (int j = 0; j < possible_moves.current_move; j++){
+//                 move->positions[j] = possible_moves.all_possible_moves[i]->positions[j];
+//                 move->jumps_pos[j] = possible_moves.all_possible_moves[i]->jumps_pos[j];
+//             }
+//             move->positions[possible_moves.current_move] = possible_moves.all_possible_moves[i]->positions[possible_moves.current_move];
+//             move->num_jumps = possible_moves.all_possible_moves[i]->num_jumps;
+//             break;
+//         }
+//     }
 
-    destroy_possible_moves(&possible_moves);
-}
+//     destroy_possible_moves(&possible_moves);
+// }
 void reset_possible_moves(int new_max_jumps, PossibleMoves *possible_moves){
-    for (int i = 0; i < possible_moves->current_move; i++){
-        free(possible_moves->all_possible_moves[i]);
-    }
+    // for (int i = 0; i < possible_moves->current_move; i++){
+    //     free(possible_moves->all_possible_moves[i]);
+    // }
     possible_moves->current_move = 0;
     possible_moves->current_max_jumps = new_max_jumps;
 }
@@ -46,24 +46,24 @@ void add_move_with_jumps(int jump_num, int positions[], int eaten[], PossibleMov
         reset_possible_moves(jump_num, possible_moves);
     } 
 
-    possible_moves->all_possible_moves[possible_moves->current_move]                        = malloc(sizeof(Move));
-    possible_moves->all_possible_moves[possible_moves->current_move]->num_jumps             = jump_num;
+    // possible_moves->all_possible_moves[possible_moves->current_move]                        = malloc(sizeof(Move));
+    possible_moves->all_possible_moves[possible_moves->current_move].num_jumps             = jump_num;
 
     for (int i = 0; i < jump_num; i++){
-        possible_moves->all_possible_moves[possible_moves->current_move]->positions[i]      = positions[i];
-        possible_moves->all_possible_moves[possible_moves->current_move]->jumps_pos[i]      = eaten[i];
+        possible_moves->all_possible_moves[possible_moves->current_move].positions[i]      = positions[i];
+        possible_moves->all_possible_moves[possible_moves->current_move].jumps_pos[i]      = eaten[i];
     }
-    possible_moves->all_possible_moves[possible_moves->current_move]->positions[jump_num]   = positions[jump_num];
-    possible_moves->all_possible_moves[possible_moves->current_move]->from                  = positions[0];
-    possible_moves->all_possible_moves[possible_moves->current_move]->to                    = positions[jump_num];
+    possible_moves->all_possible_moves[possible_moves->current_move].positions[jump_num]   = positions[jump_num];
+    possible_moves->all_possible_moves[possible_moves->current_move].from                  = positions[0];
+    possible_moves->all_possible_moves[possible_moves->current_move].to                    = positions[jump_num];
 
     possible_moves->current_move++;
 }
 void add_move_without_jumps(int from, int to, PossibleMoves *possible_moves){
-    possible_moves->all_possible_moves[possible_moves->current_move]            = malloc(sizeof(Move));
-    possible_moves->all_possible_moves[possible_moves->current_move]->num_jumps = 0;
-    possible_moves->all_possible_moves[possible_moves->current_move]->from      = from;
-    possible_moves->all_possible_moves[possible_moves->current_move]->to        = to;
+    // possible_moves->all_possible_moves[possible_moves->current_move]            = malloc(sizeof(Move));
+    possible_moves->all_possible_moves[possible_moves->current_move].num_jumps = 0;
+    possible_moves->all_possible_moves[possible_moves->current_move].from      = from;
+    possible_moves->all_possible_moves[possible_moves->current_move].to        = to;
 
     possible_moves->current_move++;
 }
@@ -144,8 +144,8 @@ void rec_compute_jumps(int color, int tab[sizeX][sizeY], int jump_num, int posit
     }
 }
 void compute_possible_moves_from_pos(int c, int tab[sizeX][sizeY], int from_pos, PossibleMoves *possible_moves){
-    int piece = get_piece(from_pos);
     int x = coordX(from_pos), y = coordY(from_pos);
+    int piece = tab[x][y];
 
     for (int dir=0; dir<4; dir++) {
         int dx = directions[dir].dx, dy = directions[dir].dy;
@@ -180,7 +180,8 @@ void compute_possible_moves(int current_turn_color, int tab[sizeX][sizeY], Possi
     reset_possible_moves(0, possible_moves);
     
     for (int pos = 1; pos <= 50; pos++){
-        if (color(get_piece(pos)) == current_turn_color){
+        int x = coordX(pos), y = coordY(pos);
+        if (color(tab[x][y]) == current_turn_color){
             compute_moves_from_pos(current_turn_color, tab, pos, possible_moves);
         }
     }
@@ -204,19 +205,20 @@ void update_board(int tab[sizeX][sizeY], Move move){
 
     /* promotion en dame */
     if ((c==BLACK && move.to>45) || (c==WHITE && move.to<6))
-        set_piece(move.to,promote_king(tab[coordX(move.to)][coordY(move.to)]));
+        tab[coordX(move.to)][coordY(move.to)] = promote_king(tab[coordX(move.to)][coordY(move.to)]);
 }
 void init_possible_moves(PossibleMoves *possible_moves){
-    possible_moves->all_possible_moves = malloc(MAX_POSSIBLE_MOVES * sizeof(Move *));
-    for (int i = 0; i < MAX_POSSIBLE_MOVES; i++){
-        possible_moves->all_possible_moves[i] = NULL;
-    }
+    // possible_moves->all_possible_moves = malloc(MAX_POSSIBLE_MOVES * sizeof(Move *));
+    // for (int i = 0; i < MAX_POSSIBLE_MOVES; i++){
+    //     possible_moves->all_possible_moves[i] = NULL;
+    // }
     possible_moves->current_move = 0;
     possible_moves->current_max_jumps = 0;
 }
 void destroy_possible_moves(PossibleMoves *possible_moves){
-    for (int i = 0; i < possible_moves->current_move; i++){
-        free(possible_moves->all_possible_moves[i]);
-    }
-    free(possible_moves->all_possible_moves);
+    return; // TOREMOVE
+    // for (int i = 0; i < possible_moves->current_move; i++){
+    //     free(possible_moves->all_possible_moves[i]);
+    // }
+    // free(possible_moves->all_possible_moves);
 }

@@ -13,7 +13,7 @@ typedef struct Move {
 } Move;
 
 typedef struct PossibleMoves {
-    Move **all_possible_moves;
+    Move all_possible_moves[MAX_POSSIBLE_MOVES];
     int current_move;
     int current_max_jumps;
 } PossibleMoves;

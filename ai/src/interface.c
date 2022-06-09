@@ -4,12 +4,24 @@ bool read_move(Move *move){
     fflush(stdin); fscanf(stdin, "%d", &(move->from));
     fflush(stdin); bool is_jump = (fgetc(stdin) == 'x');
     fflush(stdin); fscanf(stdin, "%d", &(move->to));
-
+            
+    char next;
+    move->num_jumps = 0;
     if (is_jump){
-        generate_eaten_pos(move);
+        int tmp = 0;
+        next = getchar(); // on lit le '\n'
+        next = getchar(); // on lit le '\n'
+        while (next != ')'){
+            fflush(stdin); fscanf(stdin, "%d", &tmp);
+            fprintf(stderr, "READ %d\n", tmp); fflush(stderr);
+            next = getchar(); // On lit le prochain ' ' ou ')'
+
+            move->jumps_pos[move->num_jumps] = tmp;
+            move->num_jumps++;
+        }   
+        next = getchar(); // read \n
 
     }
-    else move->num_jumps = 0;
 
 
     
