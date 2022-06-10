@@ -166,23 +166,23 @@ void compute_possible_moves_from_pos(int c, int tab[sizeX][sizeY], int from_pos,
         }
     }
 }
-void compute_moves_from_pos(int color, int tab[sizeX][sizeY], int start_pos, PossibleMoves *possible_moves){
+void compute_moves_from_pos(int color, int tab[sizeX][sizeY], int start_pos, PossibleMoves *possible_moves, bool quiescence){
     int positions[MAX_JUMPS+1];
     int eaten[MAX_JUMPS];
 
     positions[0] = start_pos;
     rec_compute_jumps(color, tab, 0, positions, eaten, possible_moves);
 
-    if (possible_moves->current_max_jumps == 0) compute_possible_moves_from_pos(color, tab, start_pos, possible_moves);
+    if (possible_moves->current_max_jumps == 0 && !quiescence) compute_possible_moves_from_pos(color, tab, start_pos, possible_moves);
 }
 
-void compute_possible_moves(int current_turn_color, int tab[sizeX][sizeY], PossibleMoves *possible_moves){
+void compute_possible_moves(int current_turn_color, int tab[sizeX][sizeY], PossibleMoves *possible_moves, bool quiescence){
     reset_possible_moves(0, possible_moves);
     
     for (int pos = 1; pos <= 50; pos++){
         int x = coordX(pos), y = coordY(pos);
         if (color(tab[x][y]) == current_turn_color){
-            compute_moves_from_pos(current_turn_color, tab, pos, possible_moves);
+            compute_moves_from_pos(current_turn_color, tab, pos, possible_moves, quiescence);
         }
     }
     

@@ -8,10 +8,16 @@
 
 void init(int argc, char *argv[], bool use_load);
 
-int alphabeta(int alpha, int beta, int tab[sizeX][sizeY], int depth, int base, int max_depth, Move *best_move){
+int alphabeta(int alpha, int beta, int tab[sizeX][sizeY], int depth, int base, int max_depth, Move *best_move, bool quiescence){
     int eval = eval_board(tab);
     if (abs(eval) == WIN || depth == max_depth){
-        return eval;
+        // return eval;
+        if (!quiescence){
+            int start = ((depth % 2) == 0) ? 0 : 1;
+            Move v;
+            return alphabeta(-INF, INF, tab, start, start, 150, &v, true);
+        }
+        else return eval;
     }
 
     int v = -1;
@@ -21,7 +27,7 @@ int alphabeta(int alpha, int beta, int tab[sizeX][sizeY], int depth, int base, i
         v = -INF;
         PossibleMoves possible_moves;
         init_possible_moves(&possible_moves);
-        compute_possible_moves(IA_color, tab, &possible_moves);
+        compute_possible_moves(IA_color, tab, &possible_moves, quiescence);
 
         int tabcopy[sizeX][sizeY];
         for (int i = 0; i < possible_moves.current_move; i++){
@@ -33,12 +39,12 @@ int alphabeta(int alpha, int beta, int tab[sizeX][sizeY], int depth, int base, i
             }
             update_board(tabcopy, possible_moves.all_possible_moves[i]);
 
-            int next = alphabeta(alpha, beta, tabcopy, depth+1, base, max_depth, best_move);
+            int next = alphabeta(alpha, beta, tabcopy, depth+1, base, max_depth, best_move, quiescence);
             if (next > v) v = next; // v = max(next, v)
             
-            if (v >= beta){
-                return v;
-            }
+            // if (v >= beta){
+            //     return v;
+            // }
             if (v > alpha) {
                 alpha = v;
                 if (depth == base){
@@ -55,6 +61,7 @@ int alphabeta(int alpha, int beta, int tab[sizeX][sizeY], int depth, int base, i
             } // alpha = max(alpha, v)
         }
 
+        if (possible_moves.current_move == 0 && quiescence) v = eval;
         destroy_possible_moves(&possible_moves);
     } else {
         // noeud de type MIN
@@ -62,7 +69,7 @@ int alphabeta(int alpha, int beta, int tab[sizeX][sizeY], int depth, int base, i
         v = INF;
         PossibleMoves possible_moves;
         init_possible_moves(&possible_moves);
-        compute_possible_moves((IA_color == WHITE) ? BLACK : WHITE, tab, &possible_moves);
+        compute_possible_moves((IA_color == WHITE) ? BLACK : WHITE, tab, &possible_moves, quiescence);
 
         int tabcopy[sizeX][sizeY];
         for (int i = 0; i < possible_moves.current_move; i++){
@@ -74,12 +81,12 @@ int alphabeta(int alpha, int beta, int tab[sizeX][sizeY], int depth, int base, i
             }
             update_board(tabcopy, possible_moves.all_possible_moves[i]);
 
-            int next = alphabeta(alpha, beta, tabcopy, depth+1, base, max_depth, best_move);
+            int next = alphabeta(alpha, beta, tabcopy, depth+1, base, max_depth, best_move, quiescence);
             if (next < v) v = next; // v = min(next, v)
             
-            if (alpha >= v){
-                return v;
-            }
+            // if (alpha >= v){
+            //     return v;
+            // }
 
             if (v < beta) {
                 beta = v; // beta = min(beta, v)
@@ -97,6 +104,7 @@ int alphabeta(int alpha, int beta, int tab[sizeX][sizeY], int depth, int base, i
             }
         }
 
+        if (possible_moves.current_move == 0 && quiescence) v = eval;
         destroy_possible_moves(&possible_moves);
     }
 
@@ -114,7 +122,7 @@ int compute_move(Move *move){
     otime=clock();
     do {
       maxdepth++;
-      ret = alphabeta(-INF, INF, board, 0, base, maxdepth, move);
+      ret = alphabeta(-INF, INF, board, 0, base, maxdepth, move, false);
       time=clock()-otime;
       ftime=(double)time/(double)CLOCKS_PER_SEC;
       fprintf(stderr, "ret=%d base=%d maxdepth=%d time=%f\n", ret, base, maxdepth, ftime); fflush(stderr);
