@@ -15,6 +15,9 @@
         "string.h": "c",
         "types.h": "c",
         "stdlib.h": "c",
-        "moves.h": "c"
+        "moves.h": "c",
+        "*.ipp": "c",
+        "random": "c",
+        "cmath": "c"
     }
 }
