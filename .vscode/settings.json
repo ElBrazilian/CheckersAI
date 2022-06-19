@@ -18,6 +18,8 @@
         "moves.h": "c",
         "*.ipp": "c",
         "random": "c",
-        "cmath": "c"
+        "cmath": "c",
+        "interface.h": "c",
+        "board.h": "c"
     }
 }

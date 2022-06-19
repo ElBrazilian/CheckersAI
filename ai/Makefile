@@ -20,7 +20,7 @@ out/%.o: ./src/%.c
 	$(CC) $(CFLAGS) -o $@ -c $^
 
 
-main: out/dames_ai.o out/board.o out/moves.o out/interface.o
+main: out/dames_ai.o out/board.o out/moves.o out/interface.o out/hash.o
 	$(CC) $(CFLAGS) -o out/$@ $^ $(LDFLAGS)
 
 run: dames_ai
