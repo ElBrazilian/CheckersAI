@@ -1,9 +1,12 @@
 #include "interface.h"
 
 bool read_move(Move *move){
-    fflush(stdin); fscanf(stdin, "%d", &(move->from));
+    int fres; 
+    fflush(stdin); fres = fscanf(stdin, "%d", &(move->from));
+    if (fres != 1) { fprintf(stderr, "ERROR read_move fscanf #1\n"); fflush(stderr); exit(1);}
     fflush(stdin); bool is_jump = (fgetc(stdin) == 'x');
-    fflush(stdin); fscanf(stdin, "%d", &(move->to));
+    fflush(stdin); fres = fscanf(stdin, "%d", &(move->to));
+    if (fres != 1) { fprintf(stderr, "ERROR read_move fscanf #2\n"); fflush(stderr); exit(1);}
             
     char next;
     move->num_jumps = 0;
@@ -12,7 +15,9 @@ bool read_move(Move *move){
         next = getchar(); // on lit le '\n'
         next = getchar(); // on lit le '\n'
         while (next != ')'){
-            fflush(stdin); fscanf(stdin, "%d", &tmp);
+            fflush(stdin); fres = fscanf(stdin, "%d", &tmp);
+            if (fres != 1) { fprintf(stderr, "ERROR read_move fscanf #3\n"); fflush(stderr); exit(1);}
+
             fprintf(stderr, "READ %d\n", tmp); fflush(stderr);
             next = getchar(); // On lit le prochain ' ' ou ')'
 
