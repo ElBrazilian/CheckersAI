@@ -1,6 +1,7 @@
 #include "board.h"
 #include "moves.h"
 #include "interface.h"
+#include "hash.h"
 
 #include <time.h>
 
@@ -148,9 +149,7 @@ int main(int argc, char *argv[]){
     int eval = 0;
     while (true){
         if (turn == IA_color){
-            // fprintf(stderr, "pre start compute\n"); fflush(stderr);
             eval = compute_move(&move);
-            // fprintf(stderr, "sending move\n"); fflush(stderr);
             send_move(move);
         } else {
             read_move(&move);
