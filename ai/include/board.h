@@ -13,7 +13,7 @@
 
 #define MAX_JUMPS 25
 #define MAX_POSSIBLE_MOVES 1200
-#define WIN 15999
+#define WIN 31217
 
 /////////////////// START //////////////////////////
 #define EMPTY    0
@@ -26,8 +26,6 @@
 
 #define sizeX 12
 #define sizeY 12
-
-#define INF 16500
 
 struct direction { int dx, dy; };
 extern const struct direction directions[4];

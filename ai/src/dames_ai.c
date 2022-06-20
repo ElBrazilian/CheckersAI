@@ -5,6 +5,7 @@
 
 #include <time.h>
 
+#define INF 999999
 
 void init(int argc, char *argv[], bool use_load);
 

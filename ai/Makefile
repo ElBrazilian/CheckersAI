@@ -20,23 +20,20 @@ out/%.o: ./src/%.c
 	$(CC) $(CFLAGS) -o $@ -c $^
 
 
-main: out/dames_ai.o out/board.o out/moves.o out/interface.o out/hash.o
+main: out/dames_ai.o out/board.o out/moves.o out/interface.o 
 	$(CC) $(CFLAGS) -o out/$@ $^ $(LDFLAGS)
 
-run: dames_ai
-	./main
-
-dames-interface:
+raco:
 	raco exe racket/dames-interface.rkt
 
-play_solo:
+play-solo:
 	./racket/dames-interface - - 
 
-play_ai: main
+play-second: main
 	./racket/dames-interface - ./out/main 
 
-play_ai_first: main
+play-solo: main
 	./racket/dames-interface ./out/main  - 
 
-solo_ai: main
-	./out/main 1
+ai-battle: main
+	./racket/dames-interface ./out/main  ./out/main
